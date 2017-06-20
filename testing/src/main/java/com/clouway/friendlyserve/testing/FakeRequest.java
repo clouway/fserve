@@ -64,6 +64,11 @@ public class FakeRequest implements RequestExt {
       return this;
     }
 
+    public Builder url(String url) {
+      this.url = url;
+      return this;
+    }
+
     public Builder contentType(String contentType) {
       this.contentType = contentType;
       return this;
