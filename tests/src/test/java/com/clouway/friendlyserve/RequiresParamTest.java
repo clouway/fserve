@@ -1,8 +1,6 @@
 package com.clouway.friendlyserve;
 
-import com.clouway.friendlyserve.testing.ParamRequest;
 import com.clouway.friendlyserve.testing.RsPrint;
-import com.google.common.collect.ImmutableMap;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.jmock.integration.junit4.JUnitRuleMockery;
@@ -12,6 +10,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 
+import static com.clouway.friendlyserve.testing.FakeRequest.aNewRequest;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -29,7 +28,7 @@ public class RequiresParamTest {
 
   @Test
   public void paramIsPassed() throws IOException {
-    final Request anyRequestWithProvidedParam = new ParamRequest(ImmutableMap.of("assertion", "::assertion::"));
+    final Request anyRequestWithProvidedParam = aNewRequest().param("assertion", "::assertion::").build();
 
     context.checking(new Expectations() {{
       oneOf(origin).ack(anyRequestWithProvidedParam);
@@ -42,14 +41,14 @@ public class RequiresParamTest {
 
   @Test
   public void emptyParam() throws IOException {
-    Response response = new RequiresParam("assertion", origin).ack(new ParamRequest(ImmutableMap.of("assertion", "")));
+    Response response = new RequiresParam("assertion", origin).ack(aNewRequest().param("assertion", "").build());
 
     assertThat(response.status().code, is(equalTo(HttpURLConnection.HTTP_BAD_REQUEST)));
   }
 
   @Test
   public void noParam() throws IOException {
-    Response response = new RequiresParam("assertion", origin).ack(new ParamRequest(ImmutableMap.<String, String>of()));
+    Response response = new RequiresParam("assertion", origin).ack(aNewRequest().build());
     assertThat(new RsPrint(response).print(), equalTo(new RsPrint(new RsBadRequest()).print()));
   }
 
