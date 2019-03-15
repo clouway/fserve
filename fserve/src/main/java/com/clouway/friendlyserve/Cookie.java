@@ -1,7 +1,6 @@
 package com.clouway.friendlyserve;
 
 import com.google.common.base.MoreObjects;
-
 import java.util.Objects;
 
 /**
@@ -13,6 +12,8 @@ public class Cookie {
     private String path = "";
     private String name = "";
     private String value = "";
+    private Boolean secured = false;
+    private Boolean httpOnly = false;
     private int expirationTimeInSeconds = -1;
 
     public Builder path(String path) {
@@ -30,25 +31,39 @@ public class Cookie {
       return this;
     }
 
+    public Builder setSecure(Boolean secured) {
+      this.secured = secured;
+      return this;
+    }
+
+    public Builder setHttpOnly(Boolean httpOnly) {
+      this.httpOnly = httpOnly;
+      return this;
+    }
+
     public Builder expiresAfter(int timeInSeconds) {
       this.expirationTimeInSeconds = timeInSeconds;
       return this;
     }
 
     public Cookie build() {
-      return new Cookie(path, name, value, expirationTimeInSeconds);
+      return new Cookie(path, name, value, secured, httpOnly, expirationTimeInSeconds);
     }
   }
 
   private String path;
   private String name;
   private String value;
+  private Boolean secured;
+  private Boolean httpOnly;
   private int expirationTimeInSeconds;
 
-  public Cookie(String path, String name, String value, int expirationTimeInSeconds) {
+  public Cookie(String path, String name, String value, Boolean secured, Boolean httpOnly, int expirationTimeInSeconds) {
     this.path = path;
     this.name = name;
     this.value = value;
+    this.secured = secured;
+    this.httpOnly = httpOnly;
     this.expirationTimeInSeconds = expirationTimeInSeconds;
   }
 
@@ -62,6 +77,14 @@ public class Cookie {
 
   public String value() {
     return value;
+  }
+
+  public Boolean isSecured() {
+    return secured;
+  }
+
+  public Boolean isHttpOnly() {
+    return httpOnly;
   }
 
   public int expirationTimeInSeconds() {

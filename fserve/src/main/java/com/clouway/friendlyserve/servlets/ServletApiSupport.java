@@ -56,6 +56,8 @@ public final class ServletApiSupport {
         javax.servlet.http.Cookie cookie = new javax.servlet.http.Cookie(each.name(), each.value());
         cookie.setPath(each.path());
         cookie.setMaxAge(each.expirationTimeInSeconds());
+        cookie.setSecure(each.isSecured());
+        cookie.setHttpOnly(each.isHttpOnly());
         
         resp.addCookie(cookie);
       }

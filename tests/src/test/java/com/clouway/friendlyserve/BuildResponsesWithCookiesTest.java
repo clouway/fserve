@@ -18,10 +18,10 @@ public class BuildResponsesWithCookiesTest {
   public void withSingleCookie() throws Exception {
     RsWithCookie response = new RsWithCookie(
             new RsEmpty(),
-            new Cookie("/", "SID", "value1", 10)
+            new Cookie("/", "SID", "value1", true, false, 10)
     );
 
-    assertThat(response.cookies(), contains(new Cookie("/", "SID", "value1", 10)));
+    assertThat(response.cookies(), contains(new Cookie("/", "SID", "value1", true, false, 10)));
     assertThat(response.body().available(), is(0));
     assertThat(response.status().code, is(HttpURLConnection.HTTP_OK));
   }
@@ -30,15 +30,15 @@ public class BuildResponsesWithCookiesTest {
   public void withMultipleCookies() throws Exception {
     RsWithCookie response = new RsWithCookie(
             new RsEmpty(),
-            new Cookie("/", "SID1", "value1", 10),
-            new Cookie("/path1", "SID2", "value2", 11),
-            new Cookie("/path2", "SID3", "value3", 12)
+            new Cookie("/", "SID1", "value1", false, true, 10),
+            new Cookie("/path1", "SID2", "value2", false, true, 11),
+            new Cookie("/path2", "SID3", "value3", true, false, 12)
     );
 
     assertThat(response.cookies(), containsInAnyOrder(
-            new Cookie("/", "SID1", "value1", 10),
-            new Cookie("/path1", "SID2", "value2", 11),
-            new Cookie("/path2", "SID3", "value3", 12)
+            new Cookie("/", "SID1", "value1", false, true, 10),
+            new Cookie("/path1", "SID2", "value2", false, true, 11),
+            new Cookie("/path2", "SID3", "value3", true, false, 12)
     ));
   }
 }
